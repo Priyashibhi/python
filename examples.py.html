@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>examples.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+examples.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd</span>
+<span class="s0">import </span><span class="s1">matplotlib</span><span class="s2">.</span><span class="s1">pyplot </span><span class="s0">as </span><span class="s1">plt</span>
+<span class="s1">file_path </span><span class="s2">= </span><span class="s3">&quot;C:</span><span class="s0">\\</span><span class="s3">Users</span><span class="s0">\\</span><span class="s3">DELL</span><span class="s0">\\</span><span class="s3">Downloads</span><span class="s0">\\</span><span class="s3">telegram_messages (1).csv&quot;</span>
+<span class="s1">df</span><span class="s2">= </span><span class="s1">pd</span><span class="s2">.</span><span class="s1">read_csv</span><span class="s2">(</span><span class="s1">file_path</span><span class="s2">)</span>
+<span class="s1">df</span><span class="s2">.</span><span class="s1">info</span><span class="s2">()</span>
+<span class="s4">#Frequent contributors</span>
+<span class="s1">contributor_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Sender Name'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">()</span>
+<span class="s1">most_frequent_contributors </span><span class="s2">= </span><span class="s1">contributor_counts</span><span class="s2">.</span><span class="s1">head</span><span class="s2">(</span><span class="s5">10</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;Top contributors by message count:&quot;</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s1">most_frequent_contributors</span><span class="s2">)</span>
+
+<span class="s4"># specific days with higher groups</span>
+<span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">] = </span><span class="s1">pd</span><span class="s2">.</span><span class="s1">to_datetime</span><span class="s2">(</span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">])</span>
+<span class="s1">df</span><span class="s2">[</span><span class="s3">'DayOfWeek'</span><span class="s2">] = </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">].</span><span class="s1">dt</span><span class="s2">.</span><span class="s1">day_name</span><span class="s2">()</span>
+<span class="s1">day_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'DayOfWeek'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;Messages sent on each day of the week:&quot;</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s1">day_counts</span><span class="s2">)</span>
+
+<span class="s4">#find out the line or a w ord most used in a group</span>
+<span class="s1">message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">()</span>
+<span class="s1">most_used_line </span><span class="s2">= </span><span class="s1">message_counts</span><span class="s2">.</span><span class="s1">idxmax</span><span class="s2">()</span>
+<span class="s1">count_of_most_used </span><span class="s2">= </span><span class="s1">message_counts</span><span class="s2">.</span><span class="s1">max</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;The most used line in the group is '</span><span class="s0">{</span><span class="s1">most_used_line</span><span class="s0">}</span><span class="s3">' with </span><span class="s0">{</span><span class="s1">count_of_most_used</span><span class="s0">} </span><span class="s3">occurrences.&quot;</span><span class="s2">)</span>
+
+<span class="s4"># frequent participants in the group</span>
+<span class="s1">sender_message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">.</span><span class="s1">groupby</span><span class="s2">(</span><span class="s3">'Sender ID'</span><span class="s2">).</span><span class="s1">size</span><span class="s2">()</span>
+<span class="s1">most_frequent_sender_id </span><span class="s2">= </span><span class="s1">sender_message_counts</span><span class="s2">.</span><span class="s1">idxmax</span><span class="s2">()</span>
+<span class="s1">count_of_most_messages </span><span class="s2">= </span><span class="s1">sender_message_counts</span><span class="s2">.</span><span class="s1">max</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;The most frequent participant in the group (by messages sent) is Sender ID: </span><span class="s0">{</span><span class="s1">most_frequent_sender_id</span><span class="s0">} </span><span class="s3">with </span><span class="s0">{</span><span class="s1">count_of_most_messages</span><span class="s0">} </span><span class="s3">messages sent.&quot;</span><span class="s2">)</span>
+
+<span class="s4">#find the most common types of dialogs</span>
+<span class="s1">dialog_type_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Dialog Type'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">()</span>
+<span class="s1">most_common_dialog_type </span><span class="s2">= </span><span class="s1">dialog_type_counts</span><span class="s2">.</span><span class="s1">idxmax</span><span class="s2">()</span>
+<span class="s1">count_of_most_common </span><span class="s2">= </span><span class="s1">dialog_type_counts</span><span class="s2">.</span><span class="s1">max</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;The most common dialog type in the group is '</span><span class="s0">{</span><span class="s1">most_common_dialog_type</span><span class="s0">}</span><span class="s3">' with </span><span class="s0">{</span><span class="s1">count_of_most_common</span><span class="s0">} </span><span class="s3">occurrences.&quot;</span><span class="s2">)</span>
+
+<span class="s4">#find the dialogs which have the most conversation</span>
+<span class="s1">dialog_message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">.</span><span class="s1">groupby</span><span class="s2">(</span><span class="s3">'Dialog Name'</span><span class="s2">)[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">count</span><span class="s2">()</span>
+<span class="s1">most_conversation_dialog </span><span class="s2">= </span><span class="s1">dialog_message_counts</span><span class="s2">.</span><span class="s1">idxmax</span><span class="s2">()</span>
+<span class="s1">count_of_messages </span><span class="s2">= </span><span class="s1">dialog_message_counts</span><span class="s2">.</span><span class="s1">max</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;The dialog with the most conversation is '</span><span class="s0">{</span><span class="s1">most_conversation_dialog</span><span class="s0">}</span><span class="s3">' with </span><span class="s0">{</span><span class="s1">count_of_messages</span><span class="s0">} </span><span class="s3">messages exchanged.&quot;</span><span class="s2">)</span>
+
+<span class="s4"># message frequency of specific senders changes over time</span>
+<span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">] = </span><span class="s1">pd</span><span class="s2">.</span><span class="s1">to_datetime</span><span class="s2">(</span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">])</span>
+<span class="s1">sender_message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">.</span><span class="s1">groupby</span><span class="s2">([</span><span class="s3">'Sender ID'</span><span class="s2">, </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">].</span><span class="s1">dt</span><span class="s2">.</span><span class="s1">date</span><span class="s2">])[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">count</span><span class="s2">()</span>
+<span class="s1">sender_message_counts </span><span class="s2">= </span><span class="s1">sender_message_counts</span><span class="s2">.</span><span class="s1">reset_index</span><span class="s2">(</span><span class="s1">name</span><span class="s2">=</span><span class="s3">'Message Count'</span><span class="s2">)</span>
+<span class="s1">specific_sender_id </span><span class="s2">= </span><span class="s5">123456789</span>
+<span class="s1">sender_data </span><span class="s2">= </span><span class="s1">sender_message_counts</span><span class="s2">[</span><span class="s1">sender_message_counts</span><span class="s2">[</span><span class="s3">'Sender ID'</span><span class="s2">] == </span><span class="s1">specific_sender_id</span><span class="s2">]</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">figure</span><span class="s2">(</span><span class="s1">figsize</span><span class="s2">=(</span><span class="s5">10</span><span class="s2">, </span><span class="s5">6</span><span class="s2">))</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">plot</span><span class="s2">(</span><span class="s1">sender_data</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">], </span><span class="s1">sender_data</span><span class="s2">[</span><span class="s3">'Message Count'</span><span class="s2">], </span><span class="s1">marker</span><span class="s2">=</span><span class="s3">'o'</span><span class="s2">, </span><span class="s1">linestyle</span><span class="s2">=</span><span class="s3">'-'</span><span class="s2">, </span><span class="s1">color</span><span class="s2">=</span><span class="s3">'b'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">title</span><span class="s2">(</span><span class="s3">f&quot;Message Frequency Over Time for Sender ID: </span><span class="s0">{</span><span class="s1">specific_sender_id</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">xlabel</span><span class="s2">(</span><span class="s3">&quot;Date&quot;</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">ylabel</span><span class="s2">(</span><span class="s3">&quot;Number of Messages&quot;</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">grid</span><span class="s2">(</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">xticks</span><span class="s2">(</span><span class="s1">rotation</span><span class="s2">=</span><span class="s5">45</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">tight_layout</span><span class="s2">()</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">show</span><span class="s2">()</span>
+
+<span class="s4">#count of message</span>
+<span class="s1">total_messages </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">count</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;The total number of messages in the dataset is: </span><span class="s0">{</span><span class="s1">total_messages</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">)</span>
+
+<span class="s4">#top 10 senders name</span>
+<span class="s1">sender_message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">.</span><span class="s1">groupby</span><span class="s2">(</span><span class="s3">'Sender Name'</span><span class="s2">)[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">count</span><span class="s2">()</span>
+<span class="s1">top_10_senders </span><span class="s2">= </span><span class="s1">sender_message_counts</span><span class="s2">.</span><span class="s1">sort_values</span><span class="s2">(</span><span class="s1">ascending</span><span class="s2">=</span><span class="s0">False</span><span class="s2">).</span><span class="s1">head</span><span class="s2">(</span><span class="s5">10</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;Top 10 Senders by Number of Messages:&quot;</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s1">top_10_senders</span><span class="s2">)</span>
+
+<span class="s4">#count of sender name</span>
+<span class="s1">sender_message_counts </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Sender Name'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;Count of messages sent by each sender:&quot;</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s1">sender_message_counts</span><span class="s2">)</span>
+
+<span class="s4">#time of the day mos activity in the group</span>
+<span class="s1">df</span><span class="s2">[</span><span class="s3">'Hour'</span><span class="s2">] = </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">].</span><span class="s1">dt</span><span class="s2">.</span><span class="s1">hour</span>
+<span class="s1">hourly_activity </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Hour'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">().</span><span class="s1">sort_index</span><span class="s2">()</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">figure</span><span class="s2">(</span><span class="s1">figsize</span><span class="s2">=(</span><span class="s5">10</span><span class="s2">, </span><span class="s5">6</span><span class="s2">))</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">plot</span><span class="s2">(</span><span class="s1">hourly_activity</span><span class="s2">.</span><span class="s1">index</span><span class="s2">, </span><span class="s1">hourly_activity</span><span class="s2">.</span><span class="s1">values</span><span class="s2">, </span><span class="s1">marker</span><span class="s2">=</span><span class="s3">'o'</span><span class="s2">, </span><span class="s1">linestyle</span><span class="s2">=</span><span class="s3">'-'</span><span class="s2">, </span><span class="s1">color</span><span class="s2">=</span><span class="s3">'b'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">title</span><span class="s2">(</span><span class="s3">'Message Activity by Hour of the Day'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">xlabel</span><span class="s2">(</span><span class="s3">'Hour of the Day'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">ylabel</span><span class="s2">(</span><span class="s3">'Number of Messages'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">xticks</span><span class="s2">(</span><span class="s1">range</span><span class="s2">(</span><span class="s5">24</span><span class="s2">))</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">grid</span><span class="s2">(</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">tight_layout</span><span class="s2">()</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">show</span><span class="s2">()</span>
+
+
+<span class="s4"># see the most new members joining the group</span>
+<span class="s1">new_member_events </span><span class="s2">= </span><span class="s1">df</span><span class="s2">[</span><span class="s1">df</span><span class="s2">[</span><span class="s3">'Message'</span><span class="s2">].</span><span class="s1">str</span><span class="s2">.</span><span class="s1">contains</span><span class="s2">(</span><span class="s3">'joined the group'</span><span class="s2">, </span><span class="s1">case</span><span class="s2">=</span><span class="s0">False</span><span class="s2">)]</span>
+<span class="s1">new_member_events</span><span class="s2">[</span><span class="s3">'Join Date'</span><span class="s2">] = </span><span class="s1">new_member_events</span><span class="s2">[</span><span class="s3">'Send Time'</span><span class="s2">].</span><span class="s1">dt</span><span class="s2">.</span><span class="s1">date</span>
+<span class="s1">new_members_by_date </span><span class="s2">= </span><span class="s1">new_member_events</span><span class="s2">[</span><span class="s3">'Join Date'</span><span class="s2">].</span><span class="s1">value_counts</span><span class="s2">().</span><span class="s1">sort_index</span><span class="s2">()</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">figure</span><span class="s2">(</span><span class="s1">figsize</span><span class="s2">=(</span><span class="s5">10</span><span class="s2">, </span><span class="s5">6</span><span class="s2">))</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">plot</span><span class="s2">(</span><span class="s1">new_members_by_date</span><span class="s2">.</span><span class="s1">index</span><span class="s2">, </span><span class="s1">new_members_by_date</span><span class="s2">.</span><span class="s1">values</span><span class="s2">, </span><span class="s1">marker</span><span class="s2">=</span><span class="s3">'o'</span><span class="s2">, </span><span class="s1">linestyle</span><span class="s2">=</span><span class="s3">'-'</span><span class="s2">, </span><span class="s1">color</span><span class="s2">=</span><span class="s3">'b'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">title</span><span class="s2">(</span><span class="s3">'Trend of New Members Joining the Group'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">xlabel</span><span class="s2">(</span><span class="s3">'Date'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">ylabel</span><span class="s2">(</span><span class="s3">'Number of New Members'</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">grid</span><span class="s2">(</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">tight_layout</span><span class="s2">()</span>
+<span class="s1">plt</span><span class="s2">.</span><span class="s1">show</span><span class="s2">()</span>
+
+<span class="s4"># total number of columns</span>
+<span class="s1">total_columns </span><span class="s2">= </span><span class="s1">len</span><span class="s2">(</span><span class="s1">df</span><span class="s2">.</span><span class="s1">columns</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f'Total number of columns in the dataset: </span><span class="s0">{</span><span class="s1">total_columns</span><span class="s0">}</span><span class="s3">'</span><span class="s2">)</span>
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>
